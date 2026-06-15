@@ -1,0 +1,17 @@
+{
+  "_comment": "Targets for sync-memory.mjs. Edit paths/modes here. Global paths are relative to the user home dir; project paths are relative to a repo root passed via --project.",
+  "globalTargets": [
+    { "agent": "claude",      "homePath": ".claude/CLAUDE.md",                          "mode": "claude-global" },
+    { "agent": "gemini+antigravity", "homePath": ".gemini/GEMINI.md",                   "mode": "plain" },
+    { "agent": "windsurf",    "homePath": ".codeium/windsurf/memories/global_rules.md", "mode": "plain", "maxChars": 6000 }
+  ],
+  "projectTargets": [
+    { "agent": "agents-md",   "rel": "AGENTS.md",                       "mode": "plain" },
+    { "agent": "claude",      "rel": "CLAUDE.md",                       "mode": "import-line", "import": "AGENTS.md" },
+    { "agent": "copilot",     "rel": ".github/copilot-instructions.md", "mode": "plain" },
+    { "agent": "cursor",      "rel": ".cursor/rules/00-global.mdc",     "mode": "mdc" },
+    { "agent": "kiro",        "rel": ".kiro/steering/global.md",        "mode": "kiro" },
+    { "agent": "antigravity", "rel": ".agents/rules/global.md",         "mode": "plain" },
+    { "agent": "windsurf",    "rel": ".windsurf/rules/global.md",       "mode": "plain" }
+  ]
+}

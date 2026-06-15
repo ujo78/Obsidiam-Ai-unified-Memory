@@ -1,0 +1,21 @@
+# --- AI-Memory: keep secrets & machine-local data out of git ---
+
+# Obsidian app/workspace state (machine-specific, contains plugin secrets)
+.obsidian/
+
+# Exported chat transcripts — may contain keys, paths, PII
+sessions/
+
+# Real per-project memory is junctioned in from ~/.claude on the live machine.
+# Publish the framework, not your private project facts. Keep the example only.
+projects/
+
+# Local secrets
+.env
+*.local
+scripts/mcp-snippets/*.local.json
+
+# OS / editor noise
+Thumbs.db
+.DS_Store
+node_modules/
