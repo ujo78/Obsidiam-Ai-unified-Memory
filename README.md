@@ -49,6 +49,7 @@ node ~/AI-Memory/scripts/register-mcp.mjs --key <API_KEY> --apply
 | Claude Code | `~/.claude/CLAUDE.md` (→ `@AGENTS.md`) |
 | Gemini CLI + Antigravity | `~/.gemini/GEMINI.md` |
 | Windsurf | `~/.codeium/windsurf/memories/global_rules.md` (≤6000 chars) |
+| OpenCode | `~/.config/opencode/AGENTS.md` (auto-loaded globally) |
 
 Per-project (`--project`): root `AGENTS.md`, thin `CLAUDE.md`, `.github/copilot-instructions.md`,
 `.cursor/rules/00-global.mdc`, `.kiro/steering/global.md`, `.agents/rules/global.md`,

@@ -37,20 +37,27 @@ const agents = [
   { name: 'windsurf',    file: path.join(HOME, '.codeium', 'windsurf', 'mcp_config.json'),       entry: { serverUrl: URL, headers: { Authorization: AUTH } } },
   { name: 'gemini-cli',  file: path.join(HOME, '.gemini', 'settings.json'),                      entry: { httpUrl: URL, headers: { Authorization: AUTH } } },
   { name: 'antigravity', file: path.join(HOME, '.gemini', 'antigravity', 'mcp_config.json'),     entry: { httpUrl: URL, headers: { Authorization: AUTH } } },
+  // OpenCode uses a different schema: servers live under "mcp" (not "mcpServers") with a "type" discriminator.
+  { name: 'opencode',    file: path.join(HOME, '.config', 'opencode', 'opencode.jsonc'),         entry: { type: 'remote', url: URL, enabled: true, headers: { Authorization: AUTH } }, schema: 'opencode' },
 ];
 
 const snippetsDir = path.join(SCRIPT_DIR, 'mcp-snippets');
 fs.mkdirSync(snippetsDir, { recursive: true });
 
-function mergeInto(file, entry) {
+function mergeInto(file, entry, schema) {
   let json = {};
   if (fs.existsSync(file)) {
-    try { json = JSON.parse(fs.readFileSync(file, 'utf8')); }
+    try { json = JSON.parse(fs.readFileSync(file, 'utf8')); }   // note: assumes JSONC with no comments
     catch { console.warn(`  ! ${file} is not valid JSON — skipping merge (snippet written instead).`); return false; }
     fs.copyFileSync(file, file + '.bak');  // backup before touching
   }
-  json.mcpServers = json.mcpServers || {};
-  json.mcpServers.obsidian = entry;
+  if (schema === 'opencode') {            // OpenCode: { "mcp": { "<name>": { type:"remote", ... } } }
+    json.mcp = json.mcp || {};
+    json.mcp.obsidian = entry;
+  } else {                                // Standard: { "mcpServers": { "<name>": { ... } } }
+    json.mcpServers = json.mcpServers || {};
+    json.mcpServers.obsidian = entry;
+  }
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(json, null, 2) + '\n', 'utf8');
   return true;
@@ -64,11 +71,11 @@ console.log(`  claude mcp add -s user --transport http obsidian ${URL} --header 
 
 // 2) Other agents — write snippets, optionally apply
 for (const a of agents) {
-  const snippet = { mcpServers: { obsidian: a.entry } };
+  const snippet = a.schema === 'opencode' ? { mcp: { obsidian: a.entry } } : { mcpServers: { obsidian: a.entry } };
   const snipPath = path.join(snippetsDir, `${a.name}.json`);
   fs.writeFileSync(snipPath, JSON.stringify(snippet, null, 2) + '\n', 'utf8');
   if (APPLY) {
-    const ok = mergeInto(a.file, a.entry);
+    const ok = mergeInto(a.file, a.entry, a.schema);
     console.log(`${a.name}: ${ok ? 'merged into ' + a.file + (fs.existsSync(a.file + '.bak') ? '  (backup .bak written)' : '') : 'snippet at ' + snipPath}`);
   } else {
     console.log(`${a.name}: snippet -> ${snipPath}   (target config: ${a.file})`);

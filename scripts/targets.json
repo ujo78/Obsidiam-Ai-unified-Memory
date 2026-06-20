@@ -3,7 +3,8 @@
   "globalTargets": [
     { "agent": "claude",      "homePath": ".claude/CLAUDE.md",                          "mode": "claude-global" },
     { "agent": "gemini+antigravity", "homePath": ".gemini/GEMINI.md",                   "mode": "plain" },
-    { "agent": "windsurf",    "homePath": ".codeium/windsurf/memories/global_rules.md", "mode": "plain", "maxChars": 6000 }
+    { "agent": "windsurf",    "homePath": ".codeium/windsurf/memories/global_rules.md", "mode": "plain", "maxChars": 6000 },
+    { "agent": "opencode",    "homePath": ".config/opencode/AGENTS.md",                 "mode": "plain" }
   ],
   "projectTargets": [
     { "agent": "agents-md",   "rel": "AGENTS.md",                       "mode": "plain" },
